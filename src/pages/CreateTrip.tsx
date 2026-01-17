@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, MapPin, Calendar, Camera } from 'lucide-react';
+import { ArrowLeft, Calendar, Camera } from 'lucide-react';
+import DestinationInput from '@/components/DestinationInput';
 
 const CreateTrip = () => {
   const navigate = useNavigate();
@@ -72,16 +73,11 @@ const CreateTrip = () => {
             <label className="text-sm font-medium text-foreground mb-2 block">
               Destination
             </label>
-            <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="e.g., Rome, Italy"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="pl-12"
-              />
-            </div>
+            <DestinationInput
+              value={destination}
+              onChange={setDestination}
+              placeholder="e.g., Rome, Italy"
+            />
           </div>
 
           {/* Dates */}
