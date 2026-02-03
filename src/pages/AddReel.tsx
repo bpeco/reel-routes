@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ProcessingAnimation } from '@/components/ProcessingAnimation';
+import { ReelToItineraryAnimation } from '@/components/ReelToItineraryAnimation';
 import { ProcessingState } from '@/types';
 import { ArrowLeft, Link2, Sparkles } from 'lucide-react';
 
@@ -12,6 +13,7 @@ const AddReel = () => {
   const { tripId } = useParams();
   const [reelUrl, setReelUrl] = useState('');
   const [processingState, setProcessingState] = useState<ProcessingState>('idle');
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,17 +41,25 @@ const AddReel = () => {
 
   useEffect(() => {
     if (processingState === 'success') {
-      const timer = setTimeout(() => {
-        navigate('/itinerary/1');
-      }, 1500);
-      return () => clearTimeout(timer);
+      // Show the reel-to-itinerary animation
+      setShowSuccessAnimation(true);
     }
-  }, [processingState, navigate]);
+  }, [processingState]);
+
+  const handleAnimationComplete = () => {
+    navigate('/itinerary/1');
+  };
 
   const isProcessing = processingState !== 'idle' && processingState !== 'success' && processingState !== 'error';
 
   return (
     <div className="mobile-container min-h-screen flex flex-col bg-background">
+      {/* Success Animation */}
+      <ReelToItineraryAnimation 
+        isVisible={showSuccessAnimation} 
+        onComplete={handleAnimationComplete}
+      />
+
       {/* Header */}
       <div className="p-4 safe-top flex items-center gap-4">
         <motion.button
