@@ -6,13 +6,14 @@ interface ReelToItineraryAnimationProps {
   onComplete?: () => void;
 }
 
+// Positions arranged in a circular path for the route
 const destinationIcons = [
-  { Icon: MapPin, delay: 0, x: -80, y: -60, color: 'text-rose-500' },
-  { Icon: Utensils, delay: 0.1, x: 80, y: -40, color: 'text-orange-500' },
-  { Icon: Camera, delay: 0.2, x: -60, y: 60, color: 'text-blue-500' },
-  { Icon: ShoppingBag, delay: 0.3, x: 70, y: 50, color: 'text-purple-500' },
-  { Icon: TreePine, delay: 0.4, x: 0, y: -90, color: 'text-emerald-500' },
-  { Icon: Landmark, delay: 0.5, x: -90, y: 0, color: 'text-amber-500' },
+  { Icon: MapPin, x: 0, y: -100, color: 'text-rose-500', label: 'Inicio' },
+  { Icon: Landmark, x: 85, y: -50, color: 'text-amber-500', label: 'Cultura' },
+  { Icon: Utensils, x: 85, y: 50, color: 'text-orange-500', label: 'Comida' },
+  { Icon: Camera, x: 0, y: 100, color: 'text-blue-500', label: 'Fotos' },
+  { Icon: ShoppingBag, x: -85, y: 50, color: 'text-purple-500', label: 'Compras' },
+  { Icon: TreePine, x: -85, y: -50, color: 'text-emerald-500', label: 'Naturaleza' },
 ];
 
 export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItineraryAnimationProps) => {
@@ -37,8 +38,8 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
                 y: (Math.random() - 0.5) * 400,
               }}
               transition={{ 
-                delay: 1.2 + i * 0.05,
-                duration: 1.5,
+                delay: 1.5 + i * 0.08,
+                duration: 2,
                 ease: "easeOut"
               }}
               className="absolute w-2 h-2 rounded-full bg-primary/40"
@@ -53,7 +54,7 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
               rotate: [0, 180, 360],
             }}
             transition={{ 
-              duration: 1,
+              duration: 1.5,
               times: [0, 0.5, 1],
               ease: "easeInOut"
             }}
@@ -72,27 +73,72 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
               opacity: [0, 0.5, 0],
             }}
             transition={{ 
-              delay: 0.8,
-              duration: 0.8,
+              delay: 1.2,
+              duration: 1,
               ease: "easeOut"
             }}
             className="absolute w-24 h-24 rounded-full border-4 border-primary"
           />
 
+          {/* SVG Path connecting destinations */}
+          <svg 
+            className="absolute w-[250px] h-[280px]" 
+            style={{ transform: 'translate(-50%, -50%)', left: '50%', top: '50%' }}
+            viewBox="-125 -140 250 280"
+          >
+            {/* Dashed path connecting all points */}
+            <motion.path
+              d={`M 0,-100 
+                  L 85,-50 
+                  L 85,50 
+                  L 0,100 
+                  L -85,50 
+                  L -85,-50 
+                  Z`}
+              fill="none"
+              stroke="hsl(var(--primary))"
+              strokeWidth="2"
+              strokeDasharray="8 4"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 0.6 }}
+              transition={{ 
+                delay: 2.5,
+                duration: 2,
+                ease: "easeInOut"
+              }}
+            />
+            
+            {/* Animated dot traveling along the path */}
+            <motion.circle
+              r="6"
+              fill="hsl(var(--primary))"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 1, 0] }}
+              transition={{ delay: 2.5, duration: 2.5 }}
+            >
+              <animateMotion
+                dur="2.5s"
+                begin="2.5s"
+                repeatCount="1"
+                path="M 0,-100 L 85,-50 L 85,50 L 0,100 L -85,50 L -85,-50 Z"
+              />
+            </motion.circle>
+          </svg>
+
           {/* Destination icons flying out */}
-          {destinationIcons.map(({ Icon, delay, x, y, color }, index) => (
+          {destinationIcons.map(({ Icon, x, y, color, label }, index) => (
             <motion.div
               key={index}
               initial={{ scale: 0, x: 0, y: 0, opacity: 0 }}
               animate={{ 
                 scale: [0, 1.2, 1],
-                x: [0, x * 1.5, x],
-                y: [0, y * 1.5, y],
+                x: [0, x * 1.3, x],
+                y: [0, y * 1.3, y],
                 opacity: [0, 1, 1],
               }}
               transition={{ 
-                delay: 1 + delay,
-                duration: 0.8,
+                delay: 1.5 + index * 0.15,
+                duration: 1,
                 ease: "easeOut"
               }}
               className="absolute"
@@ -100,17 +146,27 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
               <motion.div
                 animate={{ 
                   y: [0, -5, 0],
-                  rotate: [0, 5, -5, 0],
+                  rotate: [0, 3, -3, 0],
                 }}
                 transition={{ 
-                  delay: 1.8 + delay,
-                  duration: 2,
+                  delay: 3 + index * 0.1,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="w-14 h-14 rounded-2xl bg-card shadow-lg flex items-center justify-center border border-border"
+                className="flex flex-col items-center"
               >
-                <Icon className={`w-7 h-7 ${color}`} />
+                <div className="w-14 h-14 rounded-2xl bg-card shadow-lg flex items-center justify-center border border-border">
+                  <Icon className={`w-7 h-7 ${color}`} />
+                </div>
+                <motion.span
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 2.8 + index * 0.1 }}
+                  className="text-xs font-medium text-muted-foreground mt-1"
+                >
+                  {label}
+                </motion.span>
               </motion.div>
             </motion.div>
           ))}
@@ -120,8 +176,8 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ 
-              delay: 1.5,
-              duration: 0.5,
+              delay: 2.2,
+              duration: 0.6,
               type: "spring",
               stiffness: 200
             }}
@@ -143,7 +199,7 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2, duration: 0.5 }}
+            transition={{ delay: 3.5, duration: 0.6 }}
             className="absolute bottom-32 text-center"
           >
             <h3 className="text-2xl font-bold text-foreground mb-2">
@@ -158,14 +214,14 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.2 }}
+            transition={{ delay: 4.2 }}
             className="absolute bottom-20 w-48"
           >
             <div className="h-1 bg-muted rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
-                transition={{ delay: 2.3, duration: 0.8, ease: "easeOut" }}
+                transition={{ delay: 4.4, duration: 1, ease: "easeOut" }}
                 onAnimationComplete={onComplete}
                 className="h-full bg-primary rounded-full"
               />
