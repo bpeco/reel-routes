@@ -199,7 +199,7 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 3.5, duration: 0.6 }}
+            transition={{ delay: 4.5, duration: 0.6 }}
             className="absolute bottom-32 text-center"
           >
             <h3 className="text-2xl font-bold text-foreground mb-2">
@@ -214,14 +214,14 @@ export const ReelToItineraryAnimation = ({ isVisible, onComplete }: ReelToItiner
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 4.2 }}
+            transition={{ delay: 5.2 }}
             className="absolute bottom-20 w-48"
           >
             <div className="h-1 bg-muted rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
-                transition={{ delay: 4.4, duration: 1, ease: "easeOut" }}
+                transition={{ delay: 5.4, duration: 2, ease: "easeOut" }}
                 onAnimationComplete={onComplete}
                 className="h-full bg-primary rounded-full"
               />
