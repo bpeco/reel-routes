@@ -60,7 +60,7 @@ export const ShareReelSheet = ({ isOpen, onClose, trips, reelData }: ShareReelSh
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 z-50"
+            className="fixed inset-0 bg-black/60 z-[60]"
           />
 
           {/* Sheet */}
@@ -69,7 +69,7 @@ export const ShareReelSheet = ({ isOpen, onClose, trips, reelData }: ShareReelSh
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-3xl max-h-[85vh] overflow-hidden"
+            className="fixed bottom-0 left-0 right-0 z-[60] bg-background rounded-t-3xl max-h-[85vh] overflow-hidden"
           >
             {/* Handle */}
             <div className="flex justify-center pt-3 pb-2">
