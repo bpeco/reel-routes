@@ -4,13 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import { TripCard } from '@/components/TripCard';
 import { EmptyState } from '@/components/EmptyState';
 import { BottomNav, FloatingAddButton } from '@/components/BottomNav';
+import { ShareReelSheet } from '@/components/ShareReelSheet';
 import { mockTrips, mockUser } from '@/data/mockData';
 import { Trip } from '@/types';
-import { Bell, Search, Plane } from 'lucide-react';
+import { Bell, Search, Plane, Share2 } from 'lucide-react';
+
+// Mock reel data for simulation
+const mockReelData = {
+  url: 'https://instagram.com/reel/C8xK2mLo9Qp/',
+  thumbnail: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=400',
+  platform: 'instagram' as const,
+};
 
 const Home = () => {
   const navigate = useNavigate();
   const [trips] = useState<Trip[]>(mockTrips);
+  const [showShareSheet, setShowShareSheet] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredTrips = trips.filter((trip) =>
@@ -126,8 +135,26 @@ const Home = () => {
         )}
       </div>
 
+      {/* Share Simulation FAB */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setShowShareSheet(true)}
+        className="fixed bottom-24 left-6 z-50 w-14 h-14 rounded-full gradient-ocean shadow-float flex items-center justify-center"
+      >
+        <Share2 className="w-6 h-6 text-white" />
+      </motion.button>
+
       {/* FAB */}
       <FloatingAddButton onClick={() => navigate('/create-trip')} />
+
+      {/* Share Reel Sheet */}
+      <ShareReelSheet
+        isOpen={showShareSheet}
+        onClose={() => setShowShareSheet(false)}
+        trips={trips}
+        reelData={mockReelData}
+      />
 
       {/* Bottom Navigation */}
       <BottomNav />

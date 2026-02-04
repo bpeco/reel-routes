@@ -1,18 +1,30 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ProcessingAnimation } from '@/components/ProcessingAnimation';
 import { ReelToItineraryAnimation } from '@/components/ReelToItineraryAnimation';
 import { ProcessingState } from '@/types';
-import { ArrowLeft, Link2, Sparkles } from 'lucide-react';
+import { ArrowLeft, Link2, Sparkles, Play } from 'lucide-react';
+
+interface LocationState {
+  reelUrl?: string;
+  thumbnail?: string;
+  platform?: 'instagram' | 'tiktok';
+  fromShare?: boolean;
+}
 
 const AddReel = () => {
   const navigate = useNavigate();
   const { tripId } = useParams();
-  const [reelUrl, setReelUrl] = useState('');
-  const [processingState, setProcessingState] = useState<ProcessingState>('idle');
+  const location = useLocation();
+  const state = location.state as LocationState | null;
+  
+  // If coming from share, use the data from state
+  const fromShare = state?.fromShare ?? false;
+  const [reelUrl, setReelUrl] = useState(state?.reelUrl ?? '');
+  const [processingState, setProcessingState] = useState<ProcessingState>(fromShare ? 'downloading' : 'idle');
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -150,8 +162,40 @@ const AddReel = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="flex-1 flex items-center justify-center"
+              className="flex-1 flex flex-col items-center justify-center"
             >
+              {/* Show reel preview when coming from share */}
+              {fromShare && state?.thumbnail && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-8"
+                >
+                  <div className="relative w-24 h-32 rounded-xl overflow-hidden shadow-float">
+                    <img 
+                      src={state.thumbnail} 
+                      alt="Reel" 
+                      className="w-full h-full object-cover"
+                    />
+                    {/* Platform badge */}
+                    {state.platform === 'instagram' ? (
+                      <span className="absolute top-2 left-2 w-5 h-5 rounded bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 flex items-center justify-center text-white text-[10px] font-bold">
+                        IG
+                      </span>
+                    ) : (
+                      <span className="absolute top-2 left-2 w-5 h-5 rounded bg-black flex items-center justify-center text-white text-[10px] font-bold">
+                        TT
+                      </span>
+                    )}
+                    {/* Play icon */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-black/50 flex items-center justify-center">
+                        <Play className="w-4 h-4 text-white fill-white" />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
               <ProcessingAnimation state={processingState} />
             </motion.div>
           )}
