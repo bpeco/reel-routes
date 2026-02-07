@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { StopCard } from '@/components/StopCard';
 import { ScoutChatDrawer } from '@/components/ScoutChatDrawer';
+import { ConfirmItineraryDialog } from '@/components/ConfirmItineraryDialog';
 
 import { mockItinerary } from '@/data/mockData';
 import {
@@ -15,6 +16,7 @@ import {
   Map,
   List,
   MessageCircle,
+  Check,
 } from 'lucide-react';
 
 const ItineraryDetail = () => {
@@ -22,6 +24,14 @@ const ItineraryDetail = () => {
   const itinerary = mockItinerary;
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [isScoutOpen, setIsScoutOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  const handleConfirmItinerary = (name?: string, date?: Date) => {
+    setIsConfirmed(true);
+    setIsConfirmOpen(false);
+    // TODO: persist name/date to itinerary data
+  };
 
   return (
     <div className="mobile-container min-h-screen bg-background pb-24 relative">
@@ -180,6 +190,23 @@ const ItineraryDetail = () => {
 
       </div>
 
+      {/* Confirm Button (only if not yet confirmed) */}
+      {!isConfirmed && (
+        <div className="px-6 pb-4">
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setIsConfirmOpen(true)}
+            className="w-full py-4 rounded-2xl gradient-sunset text-white font-bold text-base flex items-center justify-center gap-2 shadow-soft"
+          >
+            <Check className="w-5 h-5" />
+            Confirm Itinerary
+          </motion.button>
+        </div>
+      )}
+
       {/* Floating Pill Bar */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -214,6 +241,14 @@ const ItineraryDetail = () => {
         isOpen={isScoutOpen}
         onClose={() => setIsScoutOpen(false)}
         itineraryTitle={itinerary.title}
+      />
+
+      {/* Confirm Itinerary Dialog */}
+      <ConfirmItineraryDialog
+        open={isConfirmOpen}
+        onOpenChange={setIsConfirmOpen}
+        onConfirm={handleConfirmItinerary}
+        defaultTitle={itinerary.title}
       />
     </div>
   );
