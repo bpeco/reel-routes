@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { StopCard } from '@/components/StopCard';
+import { ScoutChatDrawer } from '@/components/ScoutChatDrawer';
 
 import { mockItinerary } from '@/data/mockData';
 import {
@@ -20,6 +21,7 @@ const ItineraryDetail = () => {
   const navigate = useNavigate();
   const itinerary = mockItinerary;
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [isScoutOpen, setIsScoutOpen] = useState(false);
 
   return (
     <div className="mobile-container min-h-screen bg-background pb-24 relative">
@@ -198,7 +200,7 @@ const ItineraryDetail = () => {
 
           <motion.button
             whileTap={{ scale: 0.9 }}
-            onClick={() => navigate('/chat')}
+            onClick={() => setIsScoutOpen(true)}
             className="flex items-center gap-2 px-5 py-3 rounded-full hover:bg-primary/10 text-foreground font-semibold text-sm transition-all whitespace-nowrap"
           >
             <MessageCircle className="w-4 h-4 text-primary shrink-0" />
@@ -206,6 +208,13 @@ const ItineraryDetail = () => {
           </motion.button>
         </div>
       </motion.div>
+
+      {/* Scout Chat Drawer */}
+      <ScoutChatDrawer
+        isOpen={isScoutOpen}
+        onClose={() => setIsScoutOpen(false)}
+        itineraryTitle={itinerary.title}
+      />
     </div>
   );
 };
