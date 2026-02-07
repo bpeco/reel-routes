@@ -22,7 +22,7 @@ const ItineraryDetail = () => {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
 
   return (
-    <div className="mobile-container min-h-screen bg-background pb-8">
+    <div className="mobile-container min-h-screen bg-background pb-24 relative">
       {/* Header */}
       <div className="sticky top-0 z-50 glass safe-top">
         <div className="flex items-center justify-between p-4">
@@ -183,25 +183,25 @@ const ItineraryDetail = () => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, type: 'spring', stiffness: 260, damping: 20 }}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40"
+        className="sticky bottom-6 z-40 flex justify-center mt-4"
       >
         <div className="flex items-center glass rounded-full shadow-float px-2 py-2 gap-1">
           <motion.button
             whileTap={{ scale: 0.9 }}
-            className="flex items-center gap-2 px-5 py-3 rounded-full gradient-sunset text-white font-semibold text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-full gradient-sunset text-white font-semibold text-sm transition-all whitespace-nowrap"
           >
-            <Navigation className="w-4 h-4" />
+            <Navigation className="w-4 h-4 shrink-0" />
             Maps
           </motion.button>
 
-          <div className="w-px h-8 bg-border/50" />
+          <div className="w-px h-8 bg-border/50 shrink-0" />
 
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate('/chat')}
-            className="flex items-center gap-2 px-5 py-3 rounded-full hover:bg-primary/10 text-foreground font-semibold text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-full hover:bg-primary/10 text-foreground font-semibold text-sm transition-all whitespace-nowrap"
           >
-            <MessageCircle className="w-4 h-4 text-primary" />
+            <MessageCircle className="w-4 h-4 text-primary shrink-0" />
             Scout
           </motion.button>
         </div>
