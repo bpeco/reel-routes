@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { StopCard } from '@/components/StopCard';
-import { Button } from '@/components/ui/button';
+
 import { mockItinerary } from '@/data/mockData';
 import {
   ArrowLeft,
@@ -176,28 +176,36 @@ const ItineraryDetail = () => {
           </motion.div>
         )}
 
-        {/* Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-6 space-y-3"
-        >
-          <Button variant="sunset" size="lg" className="w-full">
-            <Navigation className="w-4 h-4" />
-            Open in Google Maps
-          </Button>
-          <Button
-            variant="glass"
-            size="lg"
-            className="w-full"
-            onClick={() => navigate('/chat')}
-          >
-            <MessageCircle className="w-4 h-4" />
-            Modify with AI
-          </Button>
-        </motion.div>
       </div>
+
+      {/* Floating Pill Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, type: 'spring', stiffness: 260, damping: 20 }}
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40"
+      >
+        <div className="flex items-center glass rounded-full shadow-float px-2 py-2 gap-1">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            className="flex items-center gap-2 px-5 py-3 rounded-full gradient-sunset text-white font-semibold text-sm transition-all"
+          >
+            <Navigation className="w-4 h-4" />
+            Maps
+          </motion.button>
+
+          <div className="w-px h-8 bg-border/50" />
+
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate('/chat')}
+            className="flex items-center gap-2 px-5 py-3 rounded-full hover:bg-primary/10 text-foreground font-semibold text-sm transition-all"
+          >
+            <MessageCircle className="w-4 h-4 text-primary" />
+            Scout
+          </motion.button>
+        </div>
+      </motion.div>
     </div>
   );
 };
