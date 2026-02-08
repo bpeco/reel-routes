@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Plane } from 'lucide-react';
-import bgSplash from '@/assets/bg-splash.jpg';
+import splashVideo from '@/assets/splash-video.mp4';
 
 const Splash = () => {
   const navigate = useNavigate();
@@ -17,10 +17,13 @@ const Splash = () => {
 
   return (
     <div className="mobile-container flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
-      {/* Background image */}
-      <img
-        src={bgSplash}
-        alt=""
+      {/* Background video */}
+      <video
+        src={splashVideo}
+        autoPlay
+        muted
+        loop
+        playsInline
         className="absolute inset-0 w-full h-full object-cover"
       />
 
