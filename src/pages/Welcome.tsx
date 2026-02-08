@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Map, Film } from 'lucide-react';
+import bgWelcome from '@/assets/bg-welcome.jpg';
 
 const features = [
   {
@@ -26,11 +27,21 @@ const Welcome = () => {
 
   return (
     <div className="mobile-container min-h-screen flex flex-col bg-background">
-      {/* Hero Section */}
+      {/* Hero Section with travel background */}
       <div className="relative h-[45vh] overflow-hidden">
-        {/* Gradient background */}
-        <div className="absolute inset-0 gradient-sunset" />
-        
+        {/* Background image */}
+        <img
+          src={bgWelcome}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/30" />
+
+        {/* Gradient overlay for brand consistency */}
+        <div className="absolute inset-0 gradient-sunset opacity-40" />
+
         {/* Decorative elements */}
         <motion.div
           animate={{ y: [0, -15, 0] }}
@@ -48,7 +59,7 @@ const Welcome = () => {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-extrabold text-white text-center mb-3"
+            className="text-4xl font-extrabold text-white text-center mb-3 drop-shadow-lg"
           >
             Turn Reels into
             <br />
@@ -58,7 +69,7 @@ const Welcome = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-white/80 text-center text-lg"
+            className="text-white/90 text-center text-lg drop-shadow-md"
           >
             AI-powered travel planning
           </motion.p>
