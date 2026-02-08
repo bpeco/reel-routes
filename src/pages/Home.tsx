@@ -64,29 +64,71 @@ const Home = () => {
 
       {/* Content */}
       <div className="px-6">
-        {/* Quick Stats */}
+        {/* Boarding Pass Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass rounded-2xl p-4 mb-6 shadow-card"
+          className="relative mb-6 overflow-hidden"
         >
-          <div className="flex items-center justify-between">
-            <div className="text-center flex-1">
-              <p className="text-2xl font-bold text-foreground">{trips.length}</p>
-              <p className="text-xs text-muted-foreground">Trips</p>
+          {/* Boarding pass card */}
+          <div className="bg-card rounded-2xl shadow-card border border-border overflow-hidden">
+            {/* Top strip */}
+            <div className="gradient-sunset px-4 py-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Plane className="w-4 h-4 text-white" />
+                <span className="text-xs font-bold text-white tracking-widest uppercase">Boarding Pass</span>
+              </div>
+              <span className="text-xs text-white/80 font-medium">{mockUser.name.split(' ')[0].toUpperCase()}</span>
             </div>
-            <div className="w-px h-8 bg-border" />
-            <div className="text-center flex-1">
-              <p className="text-2xl font-bold text-foreground">
-                {trips.reduce((acc, t) => acc + t.itineraries.length, 0)}
-              </p>
-              <p className="text-xs text-muted-foreground">Itineraries</p>
-            </div>
-            <div className="w-px h-8 bg-border" />
-            <div className="text-center flex-1">
-              <p className="text-2xl font-bold text-gradient-sunset">12</p>
-              <p className="text-xs text-muted-foreground">Days planned</p>
+
+            {/* Main content */}
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                {/* From */}
+                <div className="text-center">
+                  <p className="text-2xl font-extrabold text-foreground tracking-tight">{trips.length}</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mt-0.5">Trips</p>
+                </div>
+
+                {/* Plane divider */}
+                <div className="flex-1 flex items-center justify-center px-3">
+                  <div className="h-px flex-1 border-t border-dashed border-border" />
+                  <Plane className="w-4 h-4 text-primary mx-2 rotate-0" />
+                  <div className="h-px flex-1 border-t border-dashed border-border" />
+                </div>
+
+                {/* To */}
+                <div className="text-center">
+                  <p className="text-2xl font-extrabold text-foreground tracking-tight">
+                    {trips.reduce((acc, t) => acc + t.itineraries.length, 0)}
+                  </p>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mt-0.5">Itineraries</p>
+                </div>
+              </div>
+
+              {/* Tear line */}
+              <div className="relative flex items-center my-2">
+                <div className="absolute -left-6 w-5 h-5 rounded-full bg-background" />
+                <div className="w-full border-t border-dashed border-border" />
+                <div className="absolute -right-6 w-5 h-5 rounded-full bg-background" />
+              </div>
+
+              {/* Bottom section */}
+              <div className="flex items-center justify-between pt-1">
+                <div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Days Planned</p>
+                  <p className="text-xl font-extrabold text-gradient-sunset">12</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Status</p>
+                  <p className="text-xs font-bold text-primary">✈ Ready</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Seat</p>
+                  <p className="text-xs font-bold text-foreground">1A ★</p>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
