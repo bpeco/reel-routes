@@ -74,6 +74,10 @@ export const mockTrips: Trip[] = [
     endDate: '2024-03-21',
     coverImage: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800',
     itineraries: [mockItinerary],
+    reels: [
+      { id: 'r1', url: 'https://instagram.com/reel/example1' },
+      { id: 'r2', url: 'https://instagram.com/reel/example2' },
+    ],
   },
   {
     id: '2',
@@ -83,6 +87,7 @@ export const mockTrips: Trip[] = [
     endDate: '2024-04-18',
     coverImage: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800',
     itineraries: [],
+    reels: [{ id: 'r3', url: 'https://instagram.com/reel/example3' }],
   },
   {
     id: '3',
@@ -92,5 +97,6 @@ export const mockTrips: Trip[] = [
     endDate: '2024-05-04',
     coverImage: 'https://images.unsplash.com/photo-1583422409516-2895a77efded?w=800',
     itineraries: [],
+    reels: [],
   },
 ];

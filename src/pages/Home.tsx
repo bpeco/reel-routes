@@ -117,16 +117,12 @@ const Home = () => {
               {/* Bottom section */}
               <div className="flex items-center justify-between pt-1">
                 <div>
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Days Planned</p>
-                  <p className="text-xl font-extrabold text-gradient-sunset">12</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Reels Added</p>
+                  <p className="text-xl font-extrabold text-gradient-sunset">{trips.reduce((acc, t) => acc + (t.reels?.length || 0), 0)}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Status</p>
-                  <p className="text-xs font-bold text-primary">✈ Ready</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Seat</p>
-                  <p className="text-xs font-bold text-foreground">1A ★</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Next Trip</p>
+                  <p className="text-xs font-bold text-primary">{trips.length > 0 ? trips[0].name.split(' ')[0] : 'None'}</p>
                 </div>
               </div>
             </div>

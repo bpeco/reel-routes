@@ -33,6 +33,7 @@ export interface Trip {
   endDate: string;
   coverImage: string;
   itineraries: Itinerary[];
+  reels?: Array<{ id: string; url: string }>;
 }
 
 export type ProcessingState = 
