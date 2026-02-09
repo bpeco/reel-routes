@@ -116,7 +116,7 @@ const Welcome = () => {
             variant="sunset"
             size="lg"
             className="w-full"
-            onClick={() => navigate('/signup')}
+            onClick={() => navigate('/onboarding')}
           >
             Get Started
           </Button>
