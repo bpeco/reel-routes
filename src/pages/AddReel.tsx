@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ProcessingAnimation } from '@/components/ProcessingAnimation';
 import { ReelToItineraryAnimation } from '@/components/ReelToItineraryAnimation';
-import { ProcessingState } from '@/types';
+import { ProcessingState, ReelProcessingResult } from '@/types';
+import { mockSingleDayResult, mockMultiDayResult, mockDestinationGuideResult } from '@/data/mockData';
 import { ArrowLeft, Link2, Sparkles, Play } from 'lucide-react';
 
 interface LocationState {
@@ -15,13 +16,24 @@ interface LocationState {
   fromShare?: boolean;
 }
 
+// Simulate AI classification based on URL keywords
+const simulateProcessing = (url: string): ReelProcessingResult => {
+  const lower = url.toLowerCase();
+  if (lower.includes('3 days') || lower.includes('multi') || lower.includes('week')) {
+    return mockMultiDayResult;
+  }
+  if (lower.includes('cities') || lower.includes('guide') || lower.includes('pueblos') || lower.includes('ciudades')) {
+    return mockDestinationGuideResult;
+  }
+  return mockSingleDayResult;
+};
+
 const AddReel = () => {
   const navigate = useNavigate();
   const { tripId } = useParams();
   const location = useLocation();
   const state = location.state as LocationState | null;
   
-  // If coming from share, use the data from state
   const fromShare = state?.fromShare ?? false;
   const [reelUrl, setReelUrl] = useState(state?.reelUrl ?? '');
   const [processingState, setProcessingState] = useState<ProcessingState>(fromShare ? 'downloading' : 'idle');
@@ -30,8 +42,6 @@ const AddReel = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!reelUrl) return;
-
-    // Simulate processing states
     setProcessingState('downloading');
   };
 
@@ -40,33 +50,34 @@ const AddReel = () => {
       return;
     }
 
-    const stateSequence: ProcessingState[] = ['downloading', 'transcribing', 'generating', 'geocoding', 'success'];
+    const stateSequence: ProcessingState[] = ['downloading', 'transcribing', 'analyzing', 'generating', 'geocoding', 'success'];
     const currentIndex = stateSequence.indexOf(processingState);
     
     if (currentIndex < stateSequence.length - 1) {
       const timer = setTimeout(() => {
         setProcessingState(stateSequence[currentIndex + 1]);
-      }, 2000);
+      }, 1800);
       return () => clearTimeout(timer);
     }
   }, [processingState]);
 
   useEffect(() => {
     if (processingState === 'success') {
-      // Show the reel-to-itinerary animation
       setShowSuccessAnimation(true);
     }
   }, [processingState]);
 
   const handleAnimationComplete = () => {
-    navigate('/itinerary/1');
+    const result = simulateProcessing(reelUrl);
+    navigate(`/trip/${tripId}/review`, {
+      state: { result, tripId },
+    });
   };
 
   const isProcessing = processingState !== 'idle' && processingState !== 'success' && processingState !== 'error';
 
   return (
     <div className="mobile-container min-h-screen flex flex-col bg-background">
-      {/* Success Animation */}
       <ReelToItineraryAnimation 
         isVisible={showSuccessAnimation} 
         onComplete={handleAnimationComplete}
@@ -111,7 +122,7 @@ const AddReel = () => {
                   Paste your Reel URL
                 </h2>
                 <p className="text-muted-foreground">
-                  We'll extract all the travel tips and create a beautiful itinerary for you
+                  We'll analyze the content and generate itineraries, multi-day plans, or destination guides automatically
                 </p>
               </div>
 
@@ -144,6 +155,18 @@ const AddReel = () => {
                   </span>
                 </div>
 
+                {/* Reel type hints */}
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-muted-foreground text-center">La IA detecta automáticamente:</p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {['1 día', 'Multi-día', 'Guía de destinos'].map((type) => (
+                      <span key={type} className="text-[11px] px-3 py-1 rounded-full bg-primary/5 text-primary font-medium">
+                        {type}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
                 <Button
                   variant="sunset"
                   size="lg"
@@ -152,7 +175,7 @@ const AddReel = () => {
                   disabled={!reelUrl}
                 >
                   <Sparkles className="w-4 h-4" />
-                  Generate Itinerary
+                  Generate
                 </Button>
               </form>
             </motion.div>
@@ -164,7 +187,6 @@ const AddReel = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               className="flex-1 flex flex-col items-center justify-center"
             >
-              {/* Show reel preview when coming from share */}
               {fromShare && state?.thumbnail && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -172,22 +194,12 @@ const AddReel = () => {
                   className="mb-8"
                 >
                   <div className="relative w-24 h-32 rounded-xl overflow-hidden shadow-float">
-                    <img 
-                      src={state.thumbnail} 
-                      alt="Reel" 
-                      className="w-full h-full object-cover"
-                    />
-                    {/* Platform badge */}
+                    <img src={state.thumbnail} alt="Reel" className="w-full h-full object-cover" />
                     {state.platform === 'instagram' ? (
-                      <span className="absolute top-2 left-2 w-5 h-5 rounded bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 flex items-center justify-center text-white text-[10px] font-bold">
-                        IG
-                      </span>
+                      <span className="absolute top-2 left-2 w-5 h-5 rounded bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 flex items-center justify-center text-white text-[10px] font-bold">IG</span>
                     ) : (
-                      <span className="absolute top-2 left-2 w-5 h-5 rounded bg-black flex items-center justify-center text-white text-[10px] font-bold">
-                        TT
-                      </span>
+                      <span className="absolute top-2 left-2 w-5 h-5 rounded bg-black flex items-center justify-center text-white text-[10px] font-bold">TT</span>
                     )}
-                    {/* Play icon */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-8 h-8 rounded-full bg-black/50 flex items-center justify-center">
                         <Play className="w-4 h-4 text-white fill-white" />

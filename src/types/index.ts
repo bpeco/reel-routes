@@ -1,5 +1,7 @@
 export type Category = 'cultura' | 'gastronomia' | 'naturaleza' | 'iconico' | 'compras';
 
+export type ReelType = 'single-day' | 'multi-day' | 'destination-guide';
+
 export interface Stop {
   id: string;
   name: string;
@@ -23,6 +25,26 @@ export interface Itinerary {
   stops: Stop[];
   coverImage?: string;
   sourceUrl?: string;
+  dayNumber?: number; // For multi-day reels: Day 1, Day 2, etc.
+}
+
+export interface TemplateDestination {
+  id: string;
+  name: string;
+  country: string;
+  description: string;
+  highlights: string[];
+  suggestedDays: number;
+  coverImage?: string;
+  coordinates?: { lat: number; lng: number };
+}
+
+export interface TripTemplate {
+  id: string;
+  title: string;
+  description: string;
+  destinations: TemplateDestination[];
+  sourceUrl?: string;
 }
 
 export interface Trip {
@@ -33,13 +55,25 @@ export interface Trip {
   endDate: string;
   coverImage: string;
   itineraries: Itinerary[];
+  templates?: TripTemplate[];
   reels?: Array<{ id: string; url: string }>;
+}
+
+/** Result of AI processing a reel */
+export interface ReelProcessingResult {
+  reelType: ReelType;
+  /** For single-day: 1 itinerary. For multi-day: N itineraries */
+  itineraries?: Itinerary[];
+  /** For destination-guide type */
+  template?: TripTemplate;
+  sourceUrl: string;
 }
 
 export type ProcessingState = 
   | 'idle'
   | 'downloading'
   | 'transcribing'
+  | 'analyzing'
   | 'generating'
   | 'geocoding'
   | 'success'

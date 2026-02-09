@@ -4,14 +4,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/EmptyState';
 import { mockTrips } from '@/data/mockData';
-import { ArrowLeft, Calendar, MapPin, Plus, Film, MoreVertical } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Plus, Film, MoreVertical, Compass, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 
 const TripDetail = () => {
   const navigate = useNavigate();
   const { tripId } = useParams();
   const trip = mockTrips.find((t) => t.id === tripId) || mockTrips[0];
-  const [activeTab, setActiveTab] = useState<'itineraries' | 'map'>('itineraries');
+  const [activeTab, setActiveTab] = useState<'itineraries' | 'templates' | 'map'>('itineraries');
+
+  const hasTemplates = trip.templates && trip.templates.length > 0;
 
   return (
     <div className="mobile-container min-h-screen bg-background">
@@ -61,7 +63,7 @@ const TripDetail = () => {
 
       {/* Tabs */}
       <div className="px-6 py-4">
-        <div className="flex gap-2 p-1 bg-muted rounded-2xl">
+        <div className="flex gap-1 p-1 bg-muted rounded-2xl">
           <button
             onClick={() => setActiveTab('itineraries')}
             className={`flex-1 py-3 rounded-xl font-medium text-sm transition-all ${
@@ -72,6 +74,18 @@ const TripDetail = () => {
           >
             Itineraries ({trip.itineraries.length})
           </button>
+          {hasTemplates && (
+            <button
+              onClick={() => setActiveTab('templates')}
+              className={`flex-1 py-3 rounded-xl font-medium text-sm transition-all ${
+                activeTab === 'templates'
+                  ? 'bg-background shadow-card text-foreground'
+                  : 'text-muted-foreground'
+              }`}
+            >
+              Guides ({trip.templates!.length})
+            </button>
+          )}
           <button
             onClick={() => setActiveTab('map')}
             className={`flex-1 py-3 rounded-xl font-medium text-sm transition-all ${
@@ -113,7 +127,14 @@ const TripDetail = () => {
                   className="glass rounded-2xl p-4 shadow-card cursor-pointer"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-foreground">{itinerary.title}</h3>
+                    <div className="flex items-center gap-3">
+                      {itinerary.dayNumber && (
+                        <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <span className="text-sm font-extrabold text-primary">{itinerary.dayNumber}</span>
+                        </div>
+                      )}
+                      <h3 className="font-bold text-foreground">{itinerary.title}</h3>
+                    </div>
                     <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
                       {itinerary.stops.length} stops
                     </span>
@@ -131,7 +152,6 @@ const TripDetail = () => {
                 </motion.div>
               ))}
 
-              {/* Add more button */}
               <Button
                 variant="outline"
                 className="w-full"
@@ -142,6 +162,58 @@ const TripDetail = () => {
               </Button>
             </motion.div>
           )
+        ) : activeTab === 'templates' && hasTemplates ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-4"
+          >
+            {trip.templates!.map((template) => (
+              <div key={template.id} className="space-y-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <Compass className="w-4 h-4 text-primary" />
+                  <h3 className="font-bold text-foreground text-sm">{template.title}</h3>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">{template.description}</p>
+
+                {template.destinations.map((dest, di) => (
+                  <motion.div
+                    key={dest.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: di * 0.08 }}
+                    className="glass rounded-2xl overflow-hidden shadow-card"
+                  >
+                    <div className="flex gap-3 p-3">
+                      {dest.coverImage && (
+                        <img
+                          src={dest.coverImage}
+                          alt={dest.name}
+                          className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-bold text-foreground text-sm">{dest.name}</h4>
+                          <span className="text-[10px] text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                            {dest.suggestedDays}d
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{dest.description}</p>
+                        <div className="flex flex-wrap gap-1 mt-1.5">
+                          {dest.highlights.slice(0, 3).map((h) => (
+                            <span key={h} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                              {h}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ))}
+          </motion.div>
         ) : (
           <div className="h-64 rounded-2xl bg-muted flex items-center justify-center">
             <p className="text-muted-foreground">Map view coming soon</p>
