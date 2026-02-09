@@ -19,10 +19,15 @@ const stateConfig: Record<ProcessingState, { icon: typeof Download; label: strin
     label: 'Transcribing', 
     description: 'Understanding the creator\'s tips...' 
   },
+  analyzing: {
+    icon: Sparkles,
+    label: 'Analyzing Content',
+    description: 'Detecting the type of travel content...',
+  },
   generating: { 
     icon: Sparkles, 
     label: 'Generating Itinerary', 
-    description: 'AI is crafting your perfect day...' 
+    description: 'AI is crafting your perfect plan...' 
   },
   geocoding: { 
     icon: MapPin, 
@@ -32,7 +37,7 @@ const stateConfig: Record<ProcessingState, { icon: typeof Download; label: strin
   success: { 
     icon: CheckCircle, 
     label: 'Ready!', 
-    description: 'Your itinerary is ready to explore' 
+    description: 'Your content is ready to explore' 
   },
   error: { 
     icon: XCircle, 
