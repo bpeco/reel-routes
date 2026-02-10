@@ -15,6 +15,7 @@ import CreateTrip from "./pages/CreateTrip";
 import TripDetail from "./pages/TripDetail";
 import AddReel from "./pages/AddReel";
 import ReviewResult from "./pages/ReviewResult";
+import MergeReels from "./pages/MergeReels";
 import ItineraryDetail from "./pages/ItineraryDetail";
 import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/trip/:tripId" element={<TripDetail />} />
           <Route path="/trip/:tripId/add-reel" element={<AddReel />} />
           <Route path="/trip/:tripId/review" element={<ReviewResult />} />
+          <Route path="/trip/:tripId/merge-reels" element={<MergeReels />} />
           <Route path="/itinerary/:itineraryId" element={<ItineraryDetail />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
