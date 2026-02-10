@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { StopCard } from '@/components/StopCard';
 import { ScoutChatDrawer } from '@/components/ScoutChatDrawer';
 import { ConfirmItineraryDialog } from '@/components/ConfirmItineraryDialog';
+import { PlaneTransitionAnimation } from '@/components/PlaneTransitionAnimation';
 
 import { mockItinerary } from '@/data/mockData';
 import {
@@ -26,11 +27,16 @@ const ItineraryDetail = () => {
   const [isScoutOpen, setIsScoutOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [showPlaneAnimation, setShowPlaneAnimation] = useState(false);
 
   const handleConfirmItinerary = (name?: string, date?: Date) => {
     setIsConfirmed(true);
     setIsConfirmOpen(false);
-    // TODO: persist name/date to itinerary data
+    setShowPlaneAnimation(true);
+  };
+
+  const handleAnimationComplete = () => {
+    navigate('/home');
   };
 
   return (
@@ -249,6 +255,12 @@ const ItineraryDetail = () => {
         onOpenChange={setIsConfirmOpen}
         onConfirm={handleConfirmItinerary}
         defaultTitle={itinerary.title}
+      />
+
+      {/* Plane Transition Animation */}
+      <PlaneTransitionAnimation
+        isVisible={showPlaneAnimation}
+        onComplete={handleAnimationComplete}
       />
     </div>
   );
