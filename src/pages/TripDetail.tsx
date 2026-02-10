@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/EmptyState';
 import { mockTrips } from '@/data/mockData';
-import { ArrowLeft, Calendar, MapPin, Plus, Film, MoreVertical, Compass, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Plus, Film, MoreVertical, Compass, ChevronRight, Layers } from 'lucide-react';
 import { format } from 'date-fns';
 
 const TripDetail = () => {
@@ -152,14 +152,24 @@ const TripDetail = () => {
                 </motion.div>
               ))}
 
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => navigate(`/trip/${tripId}/add-reel`)}
-              >
-                <Plus className="w-4 h-4" />
-                Add from Reel
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => navigate(`/trip/${tripId}/add-reel`)}
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Reel
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => navigate(`/trip/${tripId}/merge-reels`)}
+                >
+                  <Layers className="w-4 h-4" />
+                  Merge Reels
+                </Button>
+              </div>
             </motion.div>
           )
         ) : activeTab === 'templates' && hasTemplates ? (
