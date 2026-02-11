@@ -8,6 +8,7 @@ import { ShareReelSheet } from '@/components/ShareReelSheet';
 import { mockTrips, mockUser } from '@/data/mockData';
 import { Trip } from '@/types';
 import { Bell, Search, Plane, Share2 } from 'lucide-react';
+import { ReelLimitBadge } from '@/components/ReelLimitBadge';
 
 // Mock reel data for simulation
 const mockReelData = {
@@ -128,6 +129,15 @@ const Home = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Reel Limit */}
+        <div className="mb-6">
+          <ReelLimitBadge
+            used={trips.reduce((acc, t) => acc + (t.reels?.length || 0), 0)}
+            limit={10}
+            isPremium={mockUser.isPremium}
+          />
+        </div>
 
         {/* Trips Section */}
         <div className="flex items-center justify-between mb-4">
